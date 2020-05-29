@@ -1,7 +1,7 @@
 module.exports = async (req, res) => {
 	if (req.session && req.session.userInfo) {
-		res.send({login: true});
+		res.send('var isLogin = true')
 	}else {
-		res.send({login: false});
+		res.send('var isLogin = false')
 	}
 };

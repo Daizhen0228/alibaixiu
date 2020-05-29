@@ -11,7 +11,7 @@ const formidableMiddleware = require('express-formidable');
 // web服务器
 const app = express();
 // 开放静态资源
-app.use(express.static(path.join(__dirname, '../', 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 // session配置
 app.use(session({
   secret: 'keyboard cat',
@@ -29,7 +29,8 @@ app.use(formidableMiddleware({
 }));
 
 // 数据库连接
-mongoose.connect('mongodb://itcast:itcast@localhost:27017/alibaixiu', { useNewUrlParser: true, useCreateIndex: true})
+// 如果报错用这个: mongodb://itcast:itcast@132.232.216.199:27017/alibaixiu
+mongoose.connect('mongodb://localhost:27017/alibaixiu', { useNewUrlParser: true, useCreateIndex: true})
 	.then(() => console.log('数据库连接成功'))
 	.catch(() => console.log('数据库连接失败'));
 
@@ -37,9 +38,3 @@ mongoose.connect('mongodb://itcast:itcast@localhost:27017/alibaixiu', { useNewUr
 require('./routes')(app);
 // 返回系统监听
 app.listen(3000, () => console.log('服务器启动成功'));
-
-/*
-	拦截
-	个人中心
-	评论
-*/

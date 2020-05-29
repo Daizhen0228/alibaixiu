@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 // 对象规则验证
 const Joi = require('joi');
+// hash密码
+const bcrypt = require('bcryptjs');
 
 // 用户集合规则
 const UserSchema = new Schema({
@@ -47,9 +49,9 @@ const UserSchema = new Schema({
 		// 0 未激活 1 激活
 		type: Number,
 		required: true,
-		default: 0
+		default: 1
 	}
-}, {versionKey: false});
+}, { versionKey: false });
 
 // 用户集合类
 const User = mongoose.model('User', UserSchema);
@@ -86,6 +88,26 @@ const validateLogin = user => {
 		abortEarly: true
 	});
 }
+
+User.findOne({ 'email': 'itheima@itcast.cn' }).then(async result => {
+	if (result == null) {
+		// 生成盐
+		const salt = await bcrypt.genSalt(10);
+		// 使用盐对密码进行加密
+		const password = await bcrypt.hash('123456', salt);
+
+		const user = await User.create({
+			nickName: 'itcast',
+			email: 'itheima@itcast.cn',
+			password: password,
+			role: 'admin',
+			avatar: null,
+			createTime: new Date,
+			status: 1
+		});
+	}
+})
+
 // 导出对象
 module.exports = {
 	User,
